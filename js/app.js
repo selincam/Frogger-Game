@@ -1,4 +1,4 @@
-// enemies class
+// enemies class definition
 var Enemy = function(row, speed) {
     this.x = -70;
     this.y = 60 + (row - 1) * 80;
@@ -6,7 +6,7 @@ var Enemy = function(row, speed) {
     this.sprite = 'images/enemy-bug.png';
 };
 
-// the enemy's position
+// the enemy's position update
 Enemy.prototype.update = function(dt) {
     this.x = this.x + this.speed * dt;
     if (this.x > 450) this.x = -70;
@@ -17,15 +17,15 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// player class
+// player class definition
 var Player = function(){
     this.x = 200;
     this.y = 390;
     this.score = 0;
     this.gemScore = 0;
-    this.sprite = 'images/char-cat-girl.png';
     this.row = 0;
     this.column = 2;
+    this.sprite = 'images/char-cat-girl.png';
 };
 
 // increase the score 1 when the water is reached
@@ -34,11 +34,11 @@ Player.prototype.update = function(){
     this.y = 390;
     this.row = 0;
     this.column = 2;
-    this.score += 1;
+    this.score++;
     this.finishGame();
 };
 
-// determines how to win
+// determines whether the game is over with a win
 Player.prototype.finishGame = function() {
     if (this.score === 3) {
         window.alert("Congratulations! You won the game!");
@@ -90,6 +90,7 @@ Player.prototype.handleInput = function(key) {
     this.checkGemCollected();
 };
 
+// Check if a gem collected on the road
 Player.prototype.checkGemCollected = function() {
     if (this.row === gem.row && this.column === gem.column) {
         this.gemScore++;
@@ -125,15 +126,18 @@ Gem.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// functions
+// ---- functions -----
+/*
+ * Get Random Number between the range inclusive both ends
+ */
 function getRandomNumber(min, max){
     return Math.floor(Math.random() * (max - min)) + min;
 };
 
-// Game Creation
-var player = new Player();
+// ---- Game Creation ----
 
-// holds all enemies
+// Game objects
+var player = new Player();
 var allEnemies = [];
 
 // Create enemies
