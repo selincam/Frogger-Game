@@ -1,51 +1,62 @@
-// Enemies our player must avoid
+// enemies class
 var Enemy = function(row, speed) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
     this.x = -70;
     this.y = 60 + (row - 1) * 80;
     this.speed = speed;
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
 };
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
+// the enemy's position
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
     this.x = this.x + this.speed * dt;
     if (this.x > 450) this.x = -70;
 };
 
-// Draw the enemy on the screen, required method for game
+// draw the enemy on the screen
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+// player class
 var Player = function(){
     this.x = 200;
     this.y = 390;
     this.score = 0;
+    this.gemScore = 0;
     this.sprite = 'images/char-cat-girl.png';
 };
 
+// increase the score 1 when the water is reached
 Player.prototype.update = function(){
     this.x = 200;
     this.y = 390;
     this.score += 1;
+    this.finishGame();
 };
 
+// determines how to win
+Player.prototype.finishGame = function() {
+    if (this.score === 3) {
+        window.alert("Congratulations! You won the game!");
+        this.reset();
+    }
+}
+
+// restart the game when the player hits the enemy
+Player.prototype.reset = function(){
+    this.x = 200;
+    this.y = 390;
+    this.score = 0;
+    this.gemScore = 0;
+};
+
+// draw the player on the screen
 Player.prototype.render = function(){
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-Player.prototype.handleInput = function(key){
+// determine the coordinates of the player with keyboard movements
+Player.prototype.handleInput = function(key) {
     if(key === 'left') {
         if(this.x > 0) {
             this.x = this.x - 100;
@@ -68,15 +79,9 @@ Player.prototype.handleInput = function(key){
     }
 };
 
-Player.prototype.reset = function(){
-    this.x = 200;
-    this.y = 390;
-    this.score = 0;
-};
+var player = new Player();
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
+// enables the enemy to come
 var allEnemies = [];
 
 for(var i = 0; i < 5; i++){
@@ -85,14 +90,38 @@ for(var i = 0; i < 5; i++){
     allEnemies[i] = new Enemy(random_row, random_speed);
 };
 
-var player = new Player();
-
 function getRandomNumber(min, max){
     return Math.floor(Math.random() * (max - min)) + min;
 };
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+// gem class
+var Gem = function(row, column) {
+    this.x = 0 + (column) * 100;
+    this.y = 60 + (row - 1) * 80;
+    this.sprite = 'images/gem-blue.png';
+};
+
+
+
+// increase the gem score 1 when the water is reached
+Gem.prototype.update = function() {
+    this.x = 0 + (column) * 100;
+    this.y = 60 + (row - 1) * 80;
+    this.gemScore += 1;
+};
+
+// draw the gem on the screen
+Gem.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+// Mix the gem
+var gem;
+var random_column = getRandomNumber(0, 4);
+var random_row = getRandomNumber(1, 4);
+gem = new Gem(random_row, random_column);
+
+// move the player with key presses
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',

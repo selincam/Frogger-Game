@@ -97,6 +97,7 @@ var Engine = (function(global) {
             player.update();
         }
         doc.getElementById('score').innerHTML = player.score;
+        doc.getElementById('gem-score').innerHTML = player.gemScore;
     };
 
     function checkCollisions(){
@@ -162,7 +163,12 @@ var Engine = (function(global) {
             enemy.render();
         });
 
+        //allGems.forEach(function(gem) {
+            gem.render();
+        //});
+
         player.render();
+
     }
 
     /* This function does nothing but it could have been a good place to
@@ -182,7 +188,8 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-cat-girl.png'
+        'images/char-cat-girl.png',
+        'images/gem-blue.png'
     ]);
     Resources.onReady(init);
 
